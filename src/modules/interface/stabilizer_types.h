@@ -66,6 +66,7 @@ typedef struct vec3_s point_t;
 typedef struct vec3_s velocity_t;
 typedef struct vec3_s acc_t;
 typedef struct vec3_s jerk_t;
+typedef struct vec3_s rpy_dot_t; // New type for angular velocity
 
 /* Orientation as a quaternion */
 typedef struct quaternion_s {
@@ -180,6 +181,7 @@ typedef struct state_s {
   point_t position;         // m
   velocity_t velocity;      // m/s
   acc_t acc;                // Gs (but acc.z without considering gravity)
+  rpy_dot_t attitude_rate;  // deg/s New type for angular velocity
 } state_t;
 
 #define STABILIZER_NR_OF_MOTORS 4

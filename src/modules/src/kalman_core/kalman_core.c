@@ -739,7 +739,7 @@ bool kalmanCoreFinalize(kalmanCoreData_t* this)
   return true;
 }
 
-void kalmanCoreExternalizeState(const kalmanCoreData_t* this, state_t *state, const Axis3f *acc)
+void kalmanCoreExternalizeState(const kalmanCoreData_t* this, state_t *state, const Axis3f *acc, const Axis3f *gyro)
 {
   // position state is already in world frame
   state->position = (point_t){
@@ -783,6 +783,14 @@ void kalmanCoreExternalizeState(const kalmanCoreData_t* this, state_t *state, co
       .x = this->q[1],
       .y = this->q[2],
       .z = this->q[3]
+  };
+
+  // Save the angular velocity in the body frame: New features
+
+  state->attitude_rate = (rpy_dot_t){
+    .x = gyro->x,  // [deg/s]
+    .y = gyro->y,  // [deg/s]
+    .z = gyro->z  // [deg/s]
   };
 
   assertStateNotNaN(this);
