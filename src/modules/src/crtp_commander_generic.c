@@ -405,8 +405,8 @@ static void positionDecoder(setpoint_t *setpoint, uint8_t type, const void *data
 */
 
 struct torqueThrustPacket_s {
-  uint16_t thrust;    // N
-  uint16_t torque[3]; // Nm
+  float thrust;    // N
+  float torque[3]; // Nm
 } __attribute__((packed));
 static void torqueThrustDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
 {
@@ -430,6 +430,7 @@ const static packetDecoder_t packetDecoders[] = {
   [hoverType]         = hoverDecoder,
   [fullStateType]     = fullStateDecoder,
   [positionType]      = positionDecoder,
+  [torqueThrustType]  = torqueThrustDecoder,
 };
 
 /* Decoder switch */

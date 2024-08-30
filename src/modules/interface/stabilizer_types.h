@@ -252,8 +252,8 @@ typedef enum mode_e {
 
 // Adding new setpoint types in SI units
 typedef struct torquethrust_s {
-  uint16_t thrust;    // N
-  uint16_t torque[3]; // Nm
+  float thrust;    // N
+  float torque[3]; // Nm
 } torquethrust_t;
 
 typedef struct setpoint_s {
