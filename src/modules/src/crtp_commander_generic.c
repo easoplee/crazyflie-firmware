@@ -71,6 +71,7 @@ enum packet_type {
   hoverType         = 5,
   fullStateType     = 6,
   positionType      = 7,
+  torqueThrustType  = 8,
 };
 
 /* ---===== 2 - Decoding functions =====--- */
@@ -397,6 +398,26 @@ static void positionDecoder(setpoint_t *setpoint, uint8_t type, const void *data
   setpoint->mode.yaw = modeAbs;
 
   setpoint->attitude.yaw = values->yaw;
+}
+
+/* torqueThrustDecoder
+* Set the Crazyflie thrust and torque
+*/
+
+struct torqueThrustPacket_s {
+  uint16_t thrust;    // N
+  uint16_t torque[3]; // Nm
+} __attribute__((packed));
+static void torqueThrustDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
+{
+  const struct torqueThrustPacket_s *values = data;
+
+  ASSERT(datalen == sizeof(struct torqueThrustPacket_s));
+
+  setpoint->torquethrust.thrust = values->thrust;
+  setpoint->torquethrust.torque[0] = values->torque[0];
+  setpoint->torquethrust.torque[1] = values->torque[1];
+  setpoint->torquethrust.torque[2] = values->torque[2];
 }
 
  /* ---===== 3 - packetDecoders array =====--- */
