@@ -250,6 +250,12 @@ typedef enum mode_e {
   modeVelocity
 } stab_mode_t;
 
+// Adding new setpoint types in SI units
+typedef struct torquethrust_s {
+  uint16_t thrust;    // N
+  uint16_t torque[3]; // Nm
+} torquethrust_t;
+
 typedef struct setpoint_s {
   uint32_t timestamp;
 
@@ -262,6 +268,7 @@ typedef struct setpoint_s {
   acc_t acceleration;       // m/s^2
   jerk_t jerk;              // m/s^3
   bool velocity_body;       // true if velocity is given in body frame; false if velocity is given in world frame
+  torquethrust_t torquethrust;
 
   struct {
     stab_mode_t x;
