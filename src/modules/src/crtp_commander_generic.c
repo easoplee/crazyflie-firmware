@@ -416,26 +416,10 @@ static void torqueThrustDecoder(setpoint_t *setpoint, uint8_t type, const void *
 
   ASSERT(datalen == sizeof(struct torqueThrustPacket_s));
 
-  setpoint->mode.z = modeAbs;
-
-  setpoint->position.z = values->thrust;
-
-
-  setpoint->mode.yaw = modeVelocity;
-
-  setpoint->attitudeRate.yaw = -values->torque_r;
-
-
-  setpoint->mode.roll = modeAbs;
-  setpoint->mode.pitch = modeAbs;
-
-  setpoint->attitude.roll = values->torque_p;
-  setpoint->attitude.pitch = values->torque_y;
-
-  // setpoint->torquethrust.thrust = values->thrust;
-  // setpoint->torquethrust.torque[0] = values->torque[0];
-  // setpoint->torquethrust.torque[1] = values->torque[1];
-  // setpoint->torquethrust.torque[2] = values->torque[2];
+  setpoint->torquethrust.thrust = values->thrust;
+  setpoint->torquethrust.torque_r = values->torque_r;
+  setpoint->torquethrust.torque_p = values->torque_p;
+  setpoint->torquethrust.torque_y = values->torque_y;
 }
 
  /* ---===== 3 - packetDecoders array =====--- */
