@@ -36,6 +36,8 @@
 #include "quatcompress.h"
 #include "FreeRTOS.h"
 
+#include "oot_controller.h"
+
 /* The generic commander format contains a packet type and data that has to be
  * decoded into a setpoint_t structure. The aim is to make it future-proof
  * by easily allowing the addition of new packets for future use cases.
@@ -415,6 +417,9 @@ static void torqueThrustDecoder(setpoint_t *setpoint, uint8_t type, const void *
   const struct torqueThrustPacket_s *values = data;
 
   ASSERT(datalen == sizeof(struct torqueThrustPacket_s));
+
+  // Set the packet received timestamp
+  learned_controller_packet_received();
 
   setpoint->torquethrust.thrust = values->thrust;
   setpoint->torquethrust.torque_r = values->torque_r;
