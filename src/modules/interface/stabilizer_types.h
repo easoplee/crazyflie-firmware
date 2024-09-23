@@ -190,6 +190,7 @@ typedef enum control_mode_e {
   controlModeLegacy      = 0, // legacy mode with int16_t roll, pitch, yaw and float thrust
   controlModeForceTorque = 1,
   controlModeForce       = 2,
+  controlModePWM         = 3
 } control_mode_t;
 
 typedef struct control_s {
@@ -271,6 +272,7 @@ typedef struct setpoint_s {
   jerk_t jerk;              // m/s^3
   bool velocity_body;       // true if velocity is given in body frame; false if velocity is given in world frame
   torquethrust_t torquethrust;
+  motors_thrust_uncapped_t motorsPWM;
 
   struct {
     stab_mode_t x;

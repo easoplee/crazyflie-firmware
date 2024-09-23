@@ -74,6 +74,7 @@ enum packet_type {
   fullStateType     = 6,
   positionType      = 7,
   torqueThrustType  = 8,
+  rawPWMType        = 9,
 };
 
 /* ---===== 2 - Decoding functions =====--- */
@@ -412,6 +413,7 @@ struct torqueThrustPacket_s {
   float torque_p;
   float torque_y; // Nm
 } __attribute__((packed));
+
 static void torqueThrustDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
 {
   const struct torqueThrustPacket_s *values = data;
@@ -427,6 +429,39 @@ static void torqueThrustDecoder(setpoint_t *setpoint, uint8_t type, const void *
   setpoint->torquethrust.torque_y = values->torque_y;
 }
 
+/* rawPWMDecoder
+ * Set the Crazyflie PWM values
+*/
+struct rawPWMPacket_s {
+  uint16_t pwm_m1;
+  uint16_t pwm_m2;
+  uint16_t pwm_m3;
+  uint16_t pwm_m4;
+} __attribute__((packed));
+
+static void rawPWMDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
+{
+  const struct rawPWMPacket_s *values = data;
+
+  ASSERT(datalen == sizeof(struct rawPWMPacket_s));
+
+  // Set the packet received timestamp
+  learned_controller_packet_received();
+
+  setpoint->motorsPWM.motors.m1 = values->pwm_m1;
+  setpoint->motorsPWM.motors.m2 = values->pwm_m2;
+  setpoint->motorsPWM.motors.m3 = values->pwm_m3;
+  setpoint->motorsPWM.motors.m4 = values->pwm_m4;
+
+  setpoint->mode.x = modeDisable;
+  setpoint->mode.y = modeDisable;
+  setpoint->mode.z = modeDisable;
+  setpoint->mode.roll = modeDisable;
+  setpoint->mode.pitch = modeDisable;
+  setpoint->mode.yaw = modeDisable;
+  setpoint->velocity_body = false;
+}
+
  /* ---===== 3 - packetDecoders array =====--- */
 const static packetDecoder_t packetDecoders[] = {
   [stopType]          = stopDecoder,
@@ -438,6 +473,7 @@ const static packetDecoder_t packetDecoders[] = {
   [fullStateType]     = fullStateDecoder,
   [positionType]      = positionDecoder,
   [torqueThrustType]  = torqueThrustDecoder,
+  [rawPWMType]        = rawPWMDecoder,
 };
 
 /* Decoder switch */

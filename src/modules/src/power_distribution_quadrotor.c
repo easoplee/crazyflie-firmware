@@ -129,7 +129,24 @@ static void powerDistributionForce(const control_t *control, motors_thrust_uncap
   // Not implemented yet
 }
 
-void powerDistribution(const control_t *control, motors_thrust_uncapped_t* motorThrustUncapped)
+/*
+Power distribution just take the motor setpoints and distribute the power to the motors.
+*/
+
+static void powerDistributionPWM(const control_t *control, setpoint_t *setpoint, motors_thrust_uncapped_t* motorThrustUncapped){
+  static float motorPWMs[STABILIZER_NR_OF_MOTORS];
+
+  motorPWMs[0] = setpoint->motorsPWM.motors.m1;
+  motorPWMs[1] = setpoint->motorsPWM.motors.m2;
+  motorPWMs[2] = setpoint->motorsPWM.motors.m3;
+  motorPWMs[3] = setpoint->motorsPWM.motors.m4;
+
+  for (int motorIndex = 0; motorIndex < STABILIZER_NR_OF_MOTORS; motorIndex++) {
+    motorThrustUncapped->list[motorIndex] = motorPWMs[motorIndex];
+  }
+}
+
+void powerDistribution(const control_t *control, setpoint_t *setpoint, motors_thrust_uncapped_t* motorThrustUncapped)
 {
   switch (control->controlMode) {
     case controlModeLegacy:
@@ -140,6 +157,9 @@ void powerDistribution(const control_t *control, motors_thrust_uncapped_t* motor
       break;
     case controlModeForce:
       powerDistributionForce(control, motorThrustUncapped);
+      break;
+    case controlModePWM:
+      powerDistributionPWM(control, setpoint, motorThrustUncapped);
       break;
     default:
       // Nothing here

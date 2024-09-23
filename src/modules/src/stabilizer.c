@@ -246,8 +246,8 @@ static void logCapWarning(const bool isCapped) {
   #endif
 }
 
-static void controlMotors(const control_t* control) {
-  powerDistribution(control, &motorThrustUncapped);
+static void controlMotors(const control_t* control, setpoint_t *setpoint) {
+  powerDistribution(control, setpoint, &motorThrustUncapped);
   batteryCompensation(&motorThrustUncapped, &motorThrustBatCompUncapped);
   const bool isCapped = powerDistributionCap(&motorThrustBatCompUncapped, &motorPwm);
   logCapWarning(isCapped);
@@ -321,7 +321,7 @@ static void stabilizerTask(void* param)
       // Critical for safety, be careful if you modify this code!
       // The supervisor will already set thrust to 0 in the setpoint if needed, but to be extra sure prevent motors from running.
       if (areMotorsAllowedToRun) {
-        controlMotors(&control);
+        controlMotors(&control, &setpoint);
       } else {
         motorsStop();
       }

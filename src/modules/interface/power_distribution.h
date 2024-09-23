@@ -38,7 +38,7 @@ bool powerDistributionTest(void);
  * @param control Data from the controller
  * @param motorThrustUncapped The desired thrust
  */
-void powerDistribution(const control_t *control, motors_thrust_uncapped_t* motorThrustUncapped);
+void powerDistribution(const control_t *control, setpoint_t *setpoint, motors_thrust_uncapped_t* motorThrustUncapped);
 
 /**
  * @brief Cap the thrust for the motors when out side of the valid range [0 - UINT16_MAX]. The platform specific

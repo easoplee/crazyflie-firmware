@@ -157,7 +157,7 @@ uint16_t limitThrust(int32_t value, int32_t min, int32_t max, bool* isCapped)
   return value;
 }
 
-void powerDistribution(const control_t *control, motors_thrust_uncapped_t* motorThrustUncapped)
+void powerDistribution(const control_t *control, setpoint_t *setpoint, motors_thrust_uncapped_t* motorThrustUncapped)
 {
   // Only legacy mode is currently supported
   ASSERT(control->controlMode == controlModeLegacy);
